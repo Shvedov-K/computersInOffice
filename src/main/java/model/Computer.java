@@ -33,7 +33,7 @@ public class Computer {
     }
 
     public String get_id() {
-        return _id.toString();
+        return _id.toHexString();
     }
 
     public void set_id(ObjectId _id) {

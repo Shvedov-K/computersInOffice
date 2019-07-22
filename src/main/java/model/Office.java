@@ -51,4 +51,18 @@ public class Office {
     public void setComputerList(LinkedList<Computer> computerList) {
         this.computerList = computerList;
     }
+
+    public void addComputer(Computer computer) {
+        computerList.add(computer);
+    }
+
+    public void delComputerOfId(ObjectId _id) {
+        for (Computer computer :
+                computerList) {
+            if (computer.get_id() == _id.toHexString()) {
+                computerList.remove(computer);
+                break;
+            }
+        }
+    }
 }
