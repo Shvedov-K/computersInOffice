@@ -10,6 +10,12 @@ public class Computer {
     public int RAM;
     public String CPU;
 
+    public Computer(ObjectId _id, int RAM, String CPU) {
+        this._id = _id;
+        this.RAM = RAM;
+        this.CPU = CPU;
+    }
+
     public int getRAM() {
         return RAM;
     }
