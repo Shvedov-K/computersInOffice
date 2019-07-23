@@ -1,4 +1,4 @@
-package com.studyProject.computersInOffice;
+package com.netcracker.computersInOffice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

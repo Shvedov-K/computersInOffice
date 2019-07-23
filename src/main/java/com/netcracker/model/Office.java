@@ -1,4 +1,4 @@
-package model;
+package com.netcracker.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -7,33 +7,33 @@ import java.util.LinkedList;
 
 public class Office {
     @Id
-    public ObjectId _id;
+    public ObjectId id;
 
     public String name;
-    public int countOfemployee;
+    public int countOfEmployee;
     public LinkedList<Computer> computerList;
 
     public Office(ObjectId _id, String name, int countOfemployee, LinkedList<Computer> computerList) {
-        this._id = _id;
+        this.id = _id;
         this.name = name;
-        this.countOfemployee = countOfemployee;
+        this.countOfEmployee = countOfemployee;
         this.computerList = computerList;
     }
 
-    public String get_id() {
-        return _id.toString();
+    public String getId() {
+        return id.toString();
     }
 
-    public void set_id(ObjectId _id) {
-        this._id = _id;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getCountOfemployee() {
-        return countOfemployee;
+    public int getCountOfEmployee() {
+        return countOfEmployee;
     }
 
     public LinkedList<Computer> getComputerList() {
@@ -44,8 +44,8 @@ public class Office {
         this.name = name;
     }
 
-    public void setCountOfemployee(int countOfemployee) {
-        this.countOfemployee = countOfemployee;
+    public void setCountOfEmployee(int countOfEmployee) {
+        this.countOfEmployee = countOfEmployee;
     }
 
     public void setComputerList(LinkedList<Computer> computerList) {
@@ -56,13 +56,13 @@ public class Office {
         computerList.add(computer);
     }
 
-    public void delComputerOfId(ObjectId _id) {
+    /*public void delComputerOfId(ObjectId _id) {
         for (Computer computer :
                 computerList) {
-            if (computer.get_id() == _id.toHexString()) {
+            if (computer.getId() == _id.toHexString()) {
                 computerList.remove(computer);
                 break;
             }
         }
-    }
+    }*/
 }

@@ -1,17 +1,17 @@
-package model;
+package com.netcracker.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 public class Computer {
     @Id
-    public ObjectId _id;
+    public ObjectId id;
 
     public int RAM;
     public String CPU;
 
     public Computer(ObjectId _id, int RAM, String CPU) {
-        this._id = _id;
+        this.id = _id;
         this.RAM = RAM;
         this.CPU = CPU;
     }
@@ -32,11 +32,11 @@ public class Computer {
         this.CPU = CPU;
     }
 
-    public String get_id() {
-        return _id.toHexString();
+    public String getId() {
+        return id.toHexString();
     }
 
-    public void set_id(ObjectId _id) {
-        this._id = _id;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 }
