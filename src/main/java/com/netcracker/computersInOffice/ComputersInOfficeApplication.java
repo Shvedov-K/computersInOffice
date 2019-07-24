@@ -1,5 +1,7 @@
 package com.netcracker.computersInOffice;
 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +9,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ComputersInOfficeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ComputersInOfficeApplication.class, args);
+		//SpringApplication.run(ComputersInOfficeApplication.class, args);
+		//MongoClientURI uri = new MongoClientURI("mongodb+srv://xtended16:q19961609q@cluster0-awovx.mongodb.net/test?retryWrites=true&w=majority");
+		//MongoClient mongoClient = new MongoClient(uri);
+		try{
+			SpringApplication.run(ComputersInOfficeApplication.class, args);
+			MongoClientURI uri = new MongoClientURI("mongodb+srv://xtended16:q19961609q@cluster0-awovx.mongodb.net/test?retryWrites=true&w=majority");
+			MongoClient mongoClient = new MongoClient(uri);
+			System.out.println("Connect to database successfully");
+
+		}catch(Exception e){
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		}
 	}
 
 }
