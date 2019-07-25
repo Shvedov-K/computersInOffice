@@ -7,8 +7,8 @@ import org.springframework.data.annotation.Id;
 @Data
 public class Computer {
     @Id
-    public ObjectId id;
+    private ObjectId id;
 
-    public int RAM;
-    public String CPU;
+    private int RAM;
+    private String CPU;
 }

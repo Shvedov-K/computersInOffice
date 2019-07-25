@@ -10,10 +10,10 @@ import java.util.LinkedList;
 @Data
 public class Office {
     @Id
-    public ObjectId id;
+    private ObjectId id;
 
-    public String name;
-    public int countOfEmployee;
-    public LinkedList<Computer> computerList;
+    private String name;
+    private int countOfEmployee;
+    private LinkedList<Computer> computerList;
 
 }
