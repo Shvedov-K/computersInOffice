@@ -1,6 +1,5 @@
 package com.netcracker.model;
 
-import jdk.jfr.DataAmount;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -15,5 +14,4 @@ public class Office {
     private String name;
     private int countOfEmployee;
     private LinkedList<Computer> computerList;
-
 }

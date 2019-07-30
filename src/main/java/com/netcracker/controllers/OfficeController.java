@@ -27,13 +27,13 @@ public class OfficeController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public void modifyOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody Office office) {
+    public void updateOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody Office office) {
         office.setId(id);
         repository.save(office);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Office createOffice(@Valid @RequestBody Office office) {
+    public Office addOffice(@Valid @RequestBody Office office) {
         office.setId(ObjectId.get());
         repository.save(office);
         return office;
