@@ -5,12 +5,15 @@ import com.netcracker.model.Office;
 import com.netcracker.repositories.IRepository;
 import com.netcracker.services.interfaces.OfficeService;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 
-public class OfficeServiceImp implements OfficeService {
-    static String dbName = "mydb", dbCollection = "mycollection";
+@Service
+public class OfficeServiceImpl implements OfficeService {
+
+    @Autowired
     private IRepository repository;
 
     @Override
@@ -46,7 +49,6 @@ public class OfficeServiceImp implements OfficeService {
     public void addComputer(Office office, Computer newComputer) {
         List computerList = office.getComputerList();
         computerList.add(newComputer);
-        office.setComputerList((LinkedList<Computer>) computerList);
         repository.save(office);
     }
 

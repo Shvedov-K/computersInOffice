@@ -17,7 +17,7 @@ public class ComputersInOfficeApplication {
 			SpringApplication.run(ComputersInOfficeApplication.class, args);
             //System.setProperty("org.mongodb.async.type", "netty");
             //var mongoClient = MongoClients.create("mongodb+srv://xtended16:q19961609q@cluster0-awovx.mongodb.net/test?retryWrites=true&w=majority");
-			MongoClientURI uri = new MongoClientURI("mongodb+srv://xtended16:<password>@cluster0-awovx.mongodb.net/test?retryWrites=true&w=majority");
+			MongoClientURI uri = new MongoClientURI("mongodb+srv://xtended16:<paord>@cluster0-awovx.mongodb.net/test?retryWrites=true&w=majority");
             MongoClient mongoClient = new MongoClient(uri);
             System.out.println("Connect to database successfully");
 
