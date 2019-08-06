@@ -20,11 +20,13 @@ public class OfficeController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Office> getAllOffice() {
+        System.out.println("test");
         return officeServiceImpl.getAllOffices();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Office getOfficeById(@PathVariable("id") ObjectId id) {
+        System.out.println("test");
         return officeServiceImpl.getOfficeById(id);
     }
 

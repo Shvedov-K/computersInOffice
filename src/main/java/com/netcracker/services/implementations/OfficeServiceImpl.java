@@ -18,6 +18,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public Office getOfficeById(ObjectId id) {
+
         return repository.findById(id);
     }
 
