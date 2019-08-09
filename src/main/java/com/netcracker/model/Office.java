@@ -9,9 +9,17 @@ import java.util.LinkedList;
 @Data
 public class Office {
     @Id
-    private ObjectId _id;
+    private ObjectId id;
 
     private String name;
     private int countOfEmployee;
     private LinkedList<Computer> computerList;
+
+    public String getId() {
+        return id.toHexString();
+    }
+
+    public ObjectId copyId() {
+        return id;
+    }
 }

@@ -23,23 +23,18 @@ public class OfficeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     public List<Office> getAllOffice() {
-        System.out.println("test");
         return officeService.getAllOffices();
     }
 
     @RequestMapping(value = "/t", method = RequestMethod.GET)
     @ResponseBody
     public String test() {
-        System.out.println("test");
         return "test";
     }
-
-
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Office getOfficeById(@PathVariable("id") ObjectId id) {
-        System.out.println("test");
         return officeService.getOfficeById(id);
     }
 
@@ -49,7 +44,7 @@ public class OfficeController {
         officeService.updateOffice(id, office);
     }
 
-    @RequestMapping(value = "/{id}/updateOfficedNameById", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/updateOfficesNameById", method = RequestMethod.PUT)
     @ResponseBody
     public void updateOfficesNameById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newName) {
         Office office = officeService.getOfficeById(id);
