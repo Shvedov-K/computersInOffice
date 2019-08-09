@@ -9,7 +9,7 @@ import java.util.LinkedList;
 @Data
 public class Office {
     @Id
-    private ObjectId id;
+    private ObjectId _id;
 
     private String name;
     private int countOfEmployee;

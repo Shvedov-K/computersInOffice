@@ -3,9 +3,10 @@ package com.netcracker.controllers;
 
 import com.netcracker.model.Computer;
 import com.netcracker.model.Office;
-import com.netcracker.services.implementations.OfficeServiceImpl;
+import com.netcracker.services.interfaces.OfficeService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,53 +14,71 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/office")
+@EnableAutoConfiguration
 public class OfficeController {
 
     @Autowired
-    private OfficeServiceImpl officeServiceImpl;
+    private OfficeService officeService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ResponseBody
     public List<Office> getAllOffice() {
         System.out.println("test");
-        return officeServiceImpl.getAllOffices();
+        return officeService.getAllOffices();
     }
+
+    @RequestMapping(value = "/t", method = RequestMethod.GET)
+    @ResponseBody
+    public String test() {
+        System.out.println("test");
+        return "test";
+    }
+
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
     public Office getOfficeById(@PathVariable("id") ObjectId id) {
         System.out.println("test");
-        return officeServiceImpl.getOfficeById(id);
+        return officeService.getOfficeById(id);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/updateOfficeById", method = RequestMethod.PUT)
+    @ResponseBody
     public void updateOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody Office office) {
-        officeServiceImpl.updateOffice(id, office);
+        officeService.updateOffice(id, office);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/updateOfficedNameById", method = RequestMethod.PUT)
+    @ResponseBody
     public void updateOfficesNameById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newName) {
-        Office office = officeServiceImpl.getOfficeById(id);
-        officeServiceImpl.editName(office, newName);
+        Office office = officeService.getOfficeById(id);
+        officeService.editName(office, newName);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/updateOfficesCountOfEmployeeById", method = RequestMethod.PUT)
+    @ResponseBody
     public void updateOfficesCountOfEmployeeById(@PathVariable("id") ObjectId id, @Valid @RequestBody int newCount) {
-        Office office = officeServiceImpl.getOfficeById(id);
-        officeServiceImpl.editCountOfEmployee(office, newCount);
+        Office office = officeService.getOfficeById(id);
+        officeService.editCountOfEmployee(office, newCount);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/addComputerToOfficeById", method = RequestMethod.PUT)
+    @ResponseBody
     public void addComputerToOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody Computer newComputer) {
-        Office office = officeServiceImpl.getOfficeById(id);
-        officeServiceImpl.addComputer(office, newComputer);
+        Office office = officeService.getOfficeById(id);
+        officeService.addComputer(office, newComputer);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
     public Office addOffice(@Valid @RequestBody Office office) {
-        return officeServiceImpl.addIOffice(office);
+        return officeService.addIOffice(office);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
     public void deleteOffice(@PathVariable ObjectId id) {
-        officeServiceImpl.deleteOfficeById(id);
+        officeService.deleteOfficeById(id);
     }
 }

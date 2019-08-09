@@ -2,15 +2,17 @@ package com.netcracker.services.implementations;
 
 import com.netcracker.model.Computer;
 import com.netcracker.model.Office;
-import com.netcracker.repositories.IRepository;
+import com.netcracker.repositories.interfaces.IRepository;
 import com.netcracker.services.interfaces.OfficeService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Qualifier
 public class OfficeServiceImpl implements OfficeService {
 
     @Autowired
@@ -29,7 +31,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public Office addIOffice(Office office) {
-        office.setId(ObjectId.get());
+        office.set_id(ObjectId.get());
         repository.save(office);
         return office;
     }
@@ -61,7 +63,7 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     public void updateOffice(ObjectId id, Office office) {
         Office oldOffice = repository.findById(id);
-        office.setId(oldOffice.getId());
+        office.set_id(oldOffice.get_id());
         repository.delete(oldOffice);
         repository.save(office);
     }
