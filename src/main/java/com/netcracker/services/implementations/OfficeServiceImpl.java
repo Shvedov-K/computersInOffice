@@ -53,9 +53,16 @@ public class OfficeServiceImpl implements OfficeService {
     }
 
     @Override
-    public void addComputer(Office office, ObjectId newComputerId) {
+    public void addComputer(Office office, String newComputerId) {
         List computerList = office.getComputerList();
         computerList.add(newComputerId);
+        repository.save(office);
+    }
+
+    @Override
+    public void deleteComputer(Office office, String computerId) {
+        List computerList = office.getComputerList();
+        computerList.remove(computerId);
         repository.save(office);
     }
 

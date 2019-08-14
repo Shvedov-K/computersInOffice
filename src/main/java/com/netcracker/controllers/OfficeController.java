@@ -2,6 +2,7 @@ package com.netcracker.controllers;
 
 
 import com.netcracker.model.Office;
+import com.netcracker.services.interfaces.ComputerService;
 import com.netcracker.services.interfaces.OfficeService;
 import org.bson.types.ObjectId;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -16,21 +17,17 @@ import java.util.List;
 public class OfficeController {
 
     private final OfficeService officeService;
+    private final ComputerService computerService;
 
-    public OfficeController(OfficeService officeService) {
+    public OfficeController(OfficeService officeService, ComputerService computerService) {
         this.officeService = officeService;
+        this.computerService = computerService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     public List<Office> getAllOffice() {
         return officeService.getAllOffices();
-    }
-
-    @RequestMapping(value = "/t", method = RequestMethod.GET)
-    @ResponseBody
-    public String test() {
-        return "test";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -61,9 +58,21 @@ public class OfficeController {
 
     @RequestMapping(value = "/{id}/addComputerToOfficeById", method = RequestMethod.PUT)
     @ResponseBody
-    public void addComputerToOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody ObjectId newComputerId) {
+    public String addComputerToOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newComputerId) {
+        if (computerService.usesCheck(new ObjectId(newComputerId))) return "error";
         Office office = officeService.getOfficeById(id);
         officeService.addComputer(office, newComputerId);
+        computerService.stateChange(new ObjectId(newComputerId));
+        return "complete";
+    }
+
+    @RequestMapping(value = "/{id}/removeComputerFromOfficeById", method = RequestMethod.PUT)
+    @ResponseBody
+    public String removeComputerFromOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody String computerId) {
+        if (!officeService.getOfficeById(id).getComputerList().contains(computerId)) return "error";
+        officeService.deleteComputer(officeService.getOfficeById(id), computerId);
+        computerService.stateChange(new ObjectId(computerId));
+        return "complete";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)

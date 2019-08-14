@@ -59,7 +59,20 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     @Override
+    public void stateChange(ObjectId id) {
+        Computer computer = repository.findById(id);
+        if (computer.getIsUsed()) computer.setIsUsed(false);
+        else computer.setIsUsed(true);
+        repository.save(computer);
+    }
+
+    @Override
     public void deleteComputerById(ObjectId id) {
         repository.delete(repository.findById(id));
+    }
+
+    @Override
+    public boolean usesCheck(ObjectId id) {
+        return repository.findById(id).getIsUsed();
     }
 }

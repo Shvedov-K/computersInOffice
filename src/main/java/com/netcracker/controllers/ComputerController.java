@@ -26,12 +26,6 @@ public class ComputerController {
         return computerService.getAllComputer();
     }
 
-    @RequestMapping(value = "/t", method = RequestMethod.GET)
-    @ResponseBody
-    public String test() {
-        return "test";
-    }
-
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Computer getComputerById(@PathVariable("id") ObjectId id) {

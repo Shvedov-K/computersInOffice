@@ -17,7 +17,9 @@ public interface OfficeService {
 
     void editName(Office office, String newName);
 
-    void addComputer(Office office, ObjectId newComputerId);
+    void addComputer(Office office, String newComputerId);
+
+    void deleteComputer(Office office, String computerId);
 
     void deleteOfficeById(ObjectId id);
 

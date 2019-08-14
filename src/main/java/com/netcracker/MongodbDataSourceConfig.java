@@ -4,7 +4,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -15,8 +14,11 @@ import java.util.List;
 
 @Configuration
 public class MongodbDataSourceConfig extends AbstractMongoConfiguration {
-    @Autowired
-    Environment env;
+    final Environment env;
+
+    public MongodbDataSourceConfig(Environment env) {
+        this.env = env;
+    }
 
     @Override
     public String getDatabaseName() {

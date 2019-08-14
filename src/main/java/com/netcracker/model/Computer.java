@@ -11,6 +11,7 @@ public class Computer {
 
     private int RAM;
     private String CPU;
+    private boolean isUsed;
 
     public String getId() {
         return id.toHexString();
@@ -18,5 +19,13 @@ public class Computer {
 
     public ObjectId copyId() {
         return id;
+    }
+
+    public boolean getIsUsed() {
+        return isUsed;
+    }
+
+    public void setIsUsed(boolean isUsed) {
+        this.isUsed = isUsed;
     }
 }
