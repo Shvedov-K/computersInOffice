@@ -1,8 +1,7 @@
 package com.netcracker.services.implementations;
 
-import com.netcracker.model.Computer;
 import com.netcracker.model.Office;
-import com.netcracker.repositories.interfaces.IRepository;
+import com.netcracker.repositories.OfficeRepository;
 import com.netcracker.services.interfaces.OfficeService;
 import lombok.Data;
 import org.bson.types.ObjectId;
@@ -16,10 +15,10 @@ import java.util.List;
 public class OfficeServiceImpl implements OfficeService {
 
 
-    private final IRepository repository;
+    private final OfficeRepository repository;
 
     @Autowired
-    public OfficeServiceImpl(IRepository repository) {
+    public OfficeServiceImpl(OfficeRepository repository) {
         this.repository = repository;
     }
 
@@ -54,9 +53,9 @@ public class OfficeServiceImpl implements OfficeService {
     }
 
     @Override
-    public void addComputer(Office office, Computer newComputer) {
+    public void addComputer(Office office, ObjectId newComputerId) {
         List computerList = office.getComputerList();
-        computerList.add(newComputer);
+        computerList.add(newComputerId);
         repository.save(office);
     }
 

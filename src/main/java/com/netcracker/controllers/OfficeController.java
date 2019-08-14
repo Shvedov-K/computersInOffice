@@ -1,11 +1,9 @@
 package com.netcracker.controllers;
 
 
-import com.netcracker.model.Computer;
 import com.netcracker.model.Office;
 import com.netcracker.services.interfaces.OfficeService;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +15,11 @@ import java.util.List;
 @EnableAutoConfiguration
 public class OfficeController {
 
-    @Autowired
-    private OfficeService officeService;
+    private final OfficeService officeService;
+
+    public OfficeController(OfficeService officeService) {
+        this.officeService = officeService;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
@@ -60,9 +61,9 @@ public class OfficeController {
 
     @RequestMapping(value = "/{id}/addComputerToOfficeById", method = RequestMethod.PUT)
     @ResponseBody
-    public void addComputerToOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody Computer newComputer) {
+    public void addComputerToOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody ObjectId newComputerId) {
         Office office = officeService.getOfficeById(id);
-        officeService.addComputer(office, newComputer);
+        officeService.addComputer(office, newComputerId);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)

@@ -11,4 +11,12 @@ public class Computer {
 
     private int RAM;
     private String CPU;
+
+    public String getId() {
+        return id.toHexString();
+    }
+
+    public ObjectId copyId() {
+        return id;
+    }
 }

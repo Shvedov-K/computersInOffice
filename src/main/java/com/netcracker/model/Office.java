@@ -13,7 +13,7 @@ public class Office {
 
     private String name;
     private int countOfEmployee;
-    private LinkedList<Computer> computerList;
+    private LinkedList<ObjectId> computerList;
 
     public String getId() {
         return id.toHexString();
