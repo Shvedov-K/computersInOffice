@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/computer")
 @EnableAutoConfiguration
@@ -61,6 +62,7 @@ public class ComputerController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public void deleteOffice(@PathVariable ObjectId id) {
+        if (computerService.usesCheck(id)) return;
         computerService.deleteComputerById(id);
     }
 }
