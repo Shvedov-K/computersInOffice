@@ -1,5 +1,6 @@
 package com.netcracker.services.interfaces;
 
+import com.netcracker.model.Computer;
 import com.netcracker.model.Office;
 import org.bson.types.ObjectId;
 
@@ -17,11 +18,13 @@ public interface OfficeService {
 
     void editName(Office office, String newName);
 
-    void addComputer(Office office, String newComputerId);
+    void addComputer(Office office, Computer newComputerId);
 
     void deleteComputer(Office office, String computerId);
 
     void deleteOfficeById(ObjectId id);
 
     void updateOffice(ObjectId id, Office office);
+
+    List<String> getComputersIdList(ObjectId id);
 }

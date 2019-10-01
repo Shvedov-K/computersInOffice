@@ -1,11 +1,14 @@
 package com.netcracker.controllers;
 
 
+import com.netcracker.model.Computer;
 import com.netcracker.model.Office;
 import com.netcracker.services.interfaces.ComputerService;
 import com.netcracker.services.interfaces.OfficeService;
 import org.bson.types.ObjectId;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,41 +42,57 @@ public class OfficeController {
 
     @RequestMapping(value = "/{id}/updateOfficeById", method = RequestMethod.PUT)
     @ResponseBody
-    public void updateOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody Office office) {
+    public ResponseEntity<?> updateOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody Office office) {
         officeService.updateOffice(id, office);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/updateOfficesNameById", method = RequestMethod.PUT)
     @ResponseBody
-    public void updateOfficesNameById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newName) {
+    public ResponseEntity<?> updateOfficesNameById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newName) {
         Office office = officeService.getOfficeById(id);
         officeService.editName(office, newName);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/updateOfficesCountOfEmployeeById", method = RequestMethod.PUT)
     @ResponseBody
-    public void updateOfficesCountOfEmployeeById(@PathVariable("id") ObjectId id, @Valid @RequestBody int newCount) {
+    public ResponseEntity<?> updateOfficesCountOfEmployeeById(@PathVariable("id") ObjectId id, @Valid @RequestBody int newCount) {
         Office office = officeService.getOfficeById(id);
         officeService.editCountOfEmployee(office, newCount);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/addComputerToOfficeById", method = RequestMethod.PUT)
     @ResponseBody
-    public String addComputerToOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newComputerId) {
-        if (computerService.usesCheck(new ObjectId(newComputerId))) return "error";
+    public ResponseEntity<?> addComputerToOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newComputerId) {
+        if (officeService.getComputersIdList(id).contains(newComputerId))
+            return new ResponseEntity<>("This computer is already added", HttpStatus.BAD_REQUEST);
+        Computer newComputer = computerService.getComputerById(new ObjectId(newComputerId));
+        if (newComputer == null) return new ResponseEntity<>("This computer is not found", HttpStatus.BAD_REQUEST);
         Office office = officeService.getOfficeById(id);
-        officeService.addComputer(office, newComputerId);
-        computerService.stateChange(new ObjectId(newComputerId));
-        return "complete";
+        officeService.addComputer(office, newComputer);
+        computerService.deleteComputerById(new ObjectId(newComputerId));
+        //computerService.stateChange(new ObjectId(newComputerId));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/t", method = RequestMethod.GET)
+    @ResponseBody
+    public String test(@PathVariable("id") ObjectId id) {
+        Office office = officeService.getOfficeById(id);
+        if (office == null) return "error";
+        return "ok";
     }
 
     @RequestMapping(value = "/{id}/removeComputerFromOfficeById", method = RequestMethod.PUT)
     @ResponseBody
-    public String removeComputerFromOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody String computerId) {
-        if (!officeService.getOfficeById(id).getComputerList().contains(computerId)) return "error";
+    public ResponseEntity<?> removeComputerFromOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody String computerId) {
+        if (!officeService.getComputersIdList(id).contains(computerId))
+            return new ResponseEntity<>("This computer is not found", HttpStatus.BAD_REQUEST);
         officeService.deleteComputer(officeService.getOfficeById(id), computerId);
-        computerService.stateChange(new ObjectId(computerId));
-        return "complete";
+        //computerService.stateChange(new ObjectId(computerId));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
@@ -84,7 +103,8 @@ public class OfficeController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteOffice(@PathVariable ObjectId id) {
+    public ResponseEntity<?> deleteOffice(@PathVariable ObjectId id) {
         officeService.deleteOfficeById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

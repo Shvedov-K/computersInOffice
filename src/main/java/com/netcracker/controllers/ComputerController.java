@@ -4,6 +4,8 @@ import com.netcracker.model.Computer;
 import com.netcracker.services.interfaces.ComputerService;
 import org.bson.types.ObjectId;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,22 +37,25 @@ public class ComputerController {
 
     @RequestMapping(value = "/{id}/updateComputerById", method = RequestMethod.PUT)
     @ResponseBody
-    public void updateComputerById(@PathVariable("id") ObjectId id, @Valid @RequestBody Computer computer) {
+    public ResponseEntity<?> updateComputerById(@PathVariable("id") ObjectId id, @Valid @RequestBody Computer computer) {
         computerService.updateComputer(id, computer);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/updateComputersRAMById", method = RequestMethod.PUT)
     @ResponseBody
-    public void updateComputersRAMById(@PathVariable("id") ObjectId id, @Valid @RequestBody int newRAM) {
+    public ResponseEntity<?> updateComputersRAMById(@PathVariable("id") ObjectId id, @Valid @RequestBody int newRAM) {
         Computer computer = computerService.getComputerById(id);
         computerService.editRAM(computer, newRAM);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}/updateComputersCPUById", method = RequestMethod.PUT)
     @ResponseBody
-    public void updateComputersCPUById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newCPU) {
+    public ResponseEntity<?> updateComputersCPUById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newCPU) {
         Computer computer = computerService.getComputerById(id);
         computerService.editCPU(computer, newCPU);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
@@ -61,8 +66,10 @@ public class ComputerController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteOffice(@PathVariable ObjectId id) {
-        if (computerService.usesCheck(id)) return;
+    public ResponseEntity<?> deleteComputer(@PathVariable ObjectId id) {
+        if (computerService.usesCheck(id))
+            return new ResponseEntity<>("This Office is not found", HttpStatus.BAD_REQUEST);
         computerService.deleteComputerById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

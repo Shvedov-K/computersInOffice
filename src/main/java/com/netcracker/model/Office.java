@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 import java.util.LinkedList;
+import java.util.List;
 
 @Data
 public class Office {
@@ -13,7 +14,7 @@ public class Office {
 
     private String name;
     private int countOfEmployee;
-    private LinkedList<String> computerList = new LinkedList();
+    private List<Computer> computerList = new LinkedList<>();
 
     public String getId() {
         return id.toHexString();

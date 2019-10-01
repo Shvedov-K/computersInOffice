@@ -1,5 +1,6 @@
 package com.netcracker.services.implementations;
 
+import com.netcracker.model.Computer;
 import com.netcracker.model.Office;
 import com.netcracker.repositories.OfficeRepository;
 import com.netcracker.services.interfaces.OfficeService;
@@ -8,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -24,7 +26,6 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public Office getOfficeById(ObjectId id) {
-
         return repository.findById(id);
     }
 
@@ -53,7 +54,7 @@ public class OfficeServiceImpl implements OfficeService {
     }
 
     @Override
-    public void addComputer(Office office, String newComputerId) {
+    public void addComputer(Office office, Computer newComputerId) {
         List computerList = office.getComputerList();
         computerList.add(newComputerId);
         repository.save(office);
@@ -61,8 +62,13 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public void deleteComputer(Office office, String computerId) {
-        List computerList = office.getComputerList();
-        computerList.remove(computerId);
+        List<Computer> computerList = office.getComputerList();
+        for (Computer computer : computerList) {
+            if (computer.getId() == computerId) {
+                computerList.remove(computer);
+                break;
+            }
+        }
         repository.save(office);
     }
 
@@ -77,5 +83,15 @@ public class OfficeServiceImpl implements OfficeService {
         office.setId(oldOffice.copyId());
         repository.delete(oldOffice);
         repository.save(office);
+    }
+
+    @Override
+    public List<String> getComputersIdList(ObjectId id) {
+        List<Computer> computerList = repository.findById(id).getComputerList();
+        List<String> computerIdList = new LinkedList<>();
+        for (Computer computer : computerList) {
+            computerIdList.add(computer.getId());
+        }
+        return computerIdList;
     }
 }
