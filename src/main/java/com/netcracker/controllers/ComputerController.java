@@ -2,6 +2,9 @@ package com.netcracker.controllers;
 
 import com.netcracker.model.Computer;
 import com.netcracker.services.interfaces.ComputerService;
+import com.netcracker.services.interfaces.CpuService;
+import com.netcracker.services.interfaces.RamService;
+import com.netcracker.services.interfaces.RomService;
 import org.bson.types.ObjectId;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -18,9 +21,16 @@ import java.util.List;
 public class ComputerController {
 
     private final ComputerService computerService;
+    private final CpuService cpuService;
+    private final RamService ramService;
+    private final RomService romService;
 
-    public ComputerController(ComputerService computerService) {
+
+    public ComputerController(ComputerService computerService, CpuService cpuService, RamService ramService, RomService romService) {
         this.computerService = computerService;
+        this.cpuService = cpuService;
+        this.ramService = ramService;
+        this.romService = romService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -42,33 +52,89 @@ public class ComputerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}/updateComputersRAMById", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/updateComputersRamById", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> updateComputersRAMById(@PathVariable("id") ObjectId id, @Valid @RequestBody int newRAM) {
+    public ResponseEntity<?> updateComputersRamById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newRamId) {
+        if (!ramService.getAllRam().contains(ramService.getRamById(new ObjectId(newRamId)))) {
+            computerService.deleteComputerById(id);
+            return new ResponseEntity<>("This Ram not found", HttpStatus.BAD_REQUEST);
+        }
+        if (ramService.getRamById(new ObjectId(newRamId)).getLeftInStock() == 0) {
+            computerService.deleteComputerById(id);
+            return new ResponseEntity<>("This Ram not in stock", HttpStatus.BAD_REQUEST);
+        }
         Computer computer = computerService.getComputerById(id);
-        computerService.editRAM(computer, newRAM);
+        if (computer.getRam() != null) ramService.incrementLeftInStock(new ObjectId(computer.getRam().getId()));
+        computerService.editRam(computer, ramService.getRamById(new ObjectId(newRamId)));
+        ramService.decrementLeftInStock(new ObjectId(newRamId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}/updateComputersCPUById", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}/updateComputersRomById", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> updateComputersCPUById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newCPU) {
+    public ResponseEntity<?> updateComputersRomById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newRomId) {
+        if (!romService.getAllRom().contains(romService.getRomById(new ObjectId(newRomId)))) {
+            computerService.deleteComputerById(id);
+            return new ResponseEntity<>("This Rom not found", HttpStatus.BAD_REQUEST);
+        }
+        if (romService.getRomById(new ObjectId(newRomId)).getLeftInStock() == 0) {
+            computerService.deleteComputerById(id);
+            return new ResponseEntity<>("This Rom not in stock", HttpStatus.BAD_REQUEST);
+        }
         Computer computer = computerService.getComputerById(id);
-        computerService.editCPU(computer, newCPU);
+        if (computer.getRom() != null) romService.incrementLeftInStock(new ObjectId(computer.getRom().getId()));
+        computerService.editRom(computer, romService.getRomById(new ObjectId(newRomId)));
+        romService.decrementLeftInStock(new ObjectId(newRomId));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/updateComputersCpuById", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseEntity<?> updateComputersCpuById(@PathVariable("id") ObjectId id, @Valid @RequestBody String newCpuId) {
+        if (!cpuService.getAllCpu().contains(cpuService.getCpuById(new ObjectId(newCpuId)))) {
+            computerService.deleteComputerById(id);
+            return new ResponseEntity<>("This Cpu not found", HttpStatus.BAD_REQUEST);
+        }
+        if (cpuService.getCpuById(new ObjectId(newCpuId)).getLeftInStock() == 0) {
+            computerService.deleteComputerById(id);
+            return new ResponseEntity<>("This Cpu not in stock", HttpStatus.BAD_REQUEST);
+        }
+        Computer computer = computerService.getComputerById(id);
+        if (computer.getCpu() != null) cpuService.incrementLeftInStock(new ObjectId(computer.getCpu().getId()));
+        computerService.editCpu(computer, cpuService.getCpuById(new ObjectId(newCpuId)));
+        cpuService.decrementLeftInStock(new ObjectId(newCpuId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public Computer addComputer(@Valid @RequestBody Computer computer) {
-        return computerService.addComputer(computer);
+    public ResponseEntity<?> addComputer(@Valid @RequestBody ComputerComponent computerComponent) {
+        ObjectId newId = ObjectId.get();
+        Computer newComputer = new Computer();
+        ResponseEntity responseEntity;
+        newComputer.setId(newId);
+        computerService.addComputer(newComputer);
+        responseEntity = updateComputersCpuById(newId, computerComponent.getCpuId());
+        if (!responseEntity.equals(new ResponseEntity<>(HttpStatus.OK)))
+            return responseEntity;
+        responseEntity = updateComputersRamById(newId, computerComponent.getRamId());
+        if (!responseEntity.equals(new ResponseEntity<>(HttpStatus.OK)))
+            return responseEntity;
+        responseEntity = updateComputersRomById(newId, computerComponent.getRomId());
+        if (!responseEntity.equals(new ResponseEntity<>(HttpStatus.OK)))
+            return responseEntity;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> deleteComputer(@PathVariable ObjectId id) {
-        if (computerService.usesCheck(id))
-            return new ResponseEntity<>("This Office is not found", HttpStatus.BAD_REQUEST);
+        if (!computerService.getAllComputer().contains(computerService.getComputerById(id)))
+            return new ResponseEntity<>("This Computer is not found", HttpStatus.BAD_REQUEST);
+        Computer computer = computerService.getComputerById(id);
+        romService.incrementLeftInStock(new ObjectId(computer.getRom().getId()));
+        cpuService.incrementLeftInStock(new ObjectId(computer.getCpu().getId()));
+        ramService.incrementLeftInStock(new ObjectId(computer.getRam().getId()));
         computerService.deleteComputerById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

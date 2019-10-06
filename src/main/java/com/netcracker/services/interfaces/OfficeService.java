@@ -20,7 +20,7 @@ public interface OfficeService {
 
     void addComputer(Office office, Computer newComputerId);
 
-    void deleteComputer(Office office, String computerId);
+    Computer deleteComputer(Office office, String computerId);
 
     void deleteOfficeById(ObjectId id);
 

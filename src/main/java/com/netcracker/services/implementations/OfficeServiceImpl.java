@@ -61,15 +61,16 @@ public class OfficeServiceImpl implements OfficeService {
     }
 
     @Override
-    public void deleteComputer(Office office, String computerId) {
+    public Computer deleteComputer(Office office, String computerId) {
         List<Computer> computerList = office.getComputerList();
         for (Computer computer : computerList) {
-            if (computer.getId() == computerId) {
+            if (computerId.equals(computer.getId())) {
                 computerList.remove(computer);
-                break;
+                repository.save(office);
+                return computer;
             }
         }
-        repository.save(office);
+        return null;
     }
 
     @Override

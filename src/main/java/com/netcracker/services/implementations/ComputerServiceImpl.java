@@ -2,6 +2,9 @@ package com.netcracker.services.implementations;
 
 import com.netcracker.model.Computer;
 import com.netcracker.model.Office;
+import com.netcracker.model.components.Cpu;
+import com.netcracker.model.components.Ram;
+import com.netcracker.model.components.Rom;
 import com.netcracker.repositories.ComputerRepository;
 import com.netcracker.repositories.OfficeRepository;
 import com.netcracker.services.interfaces.ComputerService;
@@ -42,20 +45,31 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     public Computer addComputer(Computer newComputer) {
-        newComputer.setId(ObjectId.get());
+        //newComputer.setId(ObjectId.get());
         computerRepository.save(newComputer);
         return newComputer;
     }
 
     @Override
-    public void editRAM(Computer computer, int newRAM) {
-        computer.setRAM(newRAM);
+    public void addOldComputer(Computer oldComputer) {
+        computerRepository.save(oldComputer);
+    }
+
+    @Override
+    public void editRam(Computer computer, Ram newRam) {
+        computer.setRam(newRam);
         computerRepository.save(computer);
     }
 
     @Override
-    public void editCPU(Computer computer, String newCPU) {
-        computer.setCPU(newCPU);
+    public void editCpu(Computer computer, Cpu newCpu) {
+        computer.setCpu(newCpu);
+        computerRepository.save(computer);
+    }
+
+    @Override
+    public void editRom(Computer computer, Rom newRom) {
+        computer.setRom(newRom);
         computerRepository.save(computer);
     }
 

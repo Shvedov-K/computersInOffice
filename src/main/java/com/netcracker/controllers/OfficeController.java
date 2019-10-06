@@ -73,16 +73,8 @@ public class OfficeController {
         Office office = officeService.getOfficeById(id);
         officeService.addComputer(office, newComputer);
         computerService.deleteComputerById(new ObjectId(newComputerId));
-        //computerService.stateChange(new ObjectId(newComputerId));
+        computerService.stateChange(new ObjectId(newComputerId));
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/{id}/t", method = RequestMethod.GET)
-    @ResponseBody
-    public String test(@PathVariable("id") ObjectId id) {
-        Office office = officeService.getOfficeById(id);
-        if (office == null) return "error";
-        return "ok";
     }
 
     @RequestMapping(value = "/{id}/removeComputerFromOfficeById", method = RequestMethod.PUT)
@@ -90,8 +82,8 @@ public class OfficeController {
     public ResponseEntity<?> removeComputerFromOfficeById(@PathVariable("id") ObjectId id, @Valid @RequestBody String computerId) {
         if (!officeService.getComputersIdList(id).contains(computerId))
             return new ResponseEntity<>("This computer is not found", HttpStatus.BAD_REQUEST);
-        officeService.deleteComputer(officeService.getOfficeById(id), computerId);
-        //computerService.stateChange(new ObjectId(computerId));
+        computerService.addOldComputer(officeService.deleteComputer(officeService.getOfficeById(id), computerId));
+        computerService.stateChange(new ObjectId(computerId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
