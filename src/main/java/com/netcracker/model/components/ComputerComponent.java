@@ -1,4 +1,4 @@
-package com.netcracker.controllers;
+package com.netcracker.model.components;
 
 import lombok.Data;
 

@@ -24,7 +24,6 @@ public class Computer {
     @NotNull
     @Valid
     private Rom rom;
-    private boolean isUsed;
 
     public String getId() {
         return id.toHexString();
@@ -34,11 +33,4 @@ public class Computer {
         return id;
     }
 
-    public boolean getIsUsed() {
-        return isUsed;
-    }
-
-    public void setIsUsed(boolean isUsed) {
-        this.isUsed = isUsed;
-    }
 }

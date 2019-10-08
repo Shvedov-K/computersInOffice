@@ -25,9 +25,6 @@ public interface ComputerService {
 
     void updateComputer(ObjectId id, Computer computer);
 
-    void stateChange(ObjectId id);
-
     void deleteComputerById(ObjectId id);
 
-    boolean usesCheck(ObjectId id);
 }

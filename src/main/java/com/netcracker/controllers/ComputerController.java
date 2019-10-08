@@ -1,6 +1,7 @@
 package com.netcracker.controllers;
 
 import com.netcracker.model.Computer;
+import com.netcracker.model.components.ComputerComponent;
 import com.netcracker.services.interfaces.ComputerService;
 import com.netcracker.services.interfaces.CpuService;
 import com.netcracker.services.interfaces.RamService;
@@ -132,9 +133,9 @@ public class ComputerController {
         if (!computerService.getAllComputer().contains(computerService.getComputerById(id)))
             return new ResponseEntity<>("This Computer is not found", HttpStatus.BAD_REQUEST);
         Computer computer = computerService.getComputerById(id);
-        romService.incrementLeftInStock(new ObjectId(computer.getRom().getId()));
-        cpuService.incrementLeftInStock(new ObjectId(computer.getCpu().getId()));
-        ramService.incrementLeftInStock(new ObjectId(computer.getRam().getId()));
+        if (computer.getRom() != null) romService.incrementLeftInStock(new ObjectId(computer.getRom().getId()));
+        if (computer.getCpu() != null) cpuService.incrementLeftInStock(new ObjectId(computer.getCpu().getId()));
+        if (computer.getRam() != null) ramService.incrementLeftInStock(new ObjectId(computer.getRam().getId()));
         computerService.deleteComputerById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

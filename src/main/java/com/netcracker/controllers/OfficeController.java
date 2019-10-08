@@ -73,7 +73,6 @@ public class OfficeController {
         Office office = officeService.getOfficeById(id);
         officeService.addComputer(office, newComputer);
         computerService.deleteComputerById(new ObjectId(newComputerId));
-        //computerService.stateChange(new ObjectId(newComputerId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -84,7 +83,6 @@ public class OfficeController {
             return new ResponseEntity<>("This computer is not found", HttpStatus.BAD_REQUEST);
         Computer computer = officeService.deleteComputer(officeService.getOfficeById(id), computerId);
         computerService.addOldComputer(computer);
-        //computerService.stateChange(new ObjectId(computerId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
