@@ -48,8 +48,18 @@ public class ComputerController {
 
     @RequestMapping(value = "/{id}/updateComputerById", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<?> updateComputerById(@PathVariable("id") ObjectId id, @Valid @RequestBody Computer computer) {
-        computerService.updateComputer(id, computer);
+    public ResponseEntity<?> updateComputerById(@PathVariable("id") ObjectId id, @Valid @RequestBody ComputerComponent computerComponent) {
+        //computerService.updateComputer(id, computer);
+        ResponseEntity responseEntity;
+        responseEntity = updateComputersCpuById(id, computerComponent.getCpuId());
+        if (!responseEntity.equals(new ResponseEntity<>(HttpStatus.OK)))
+            return responseEntity;
+        responseEntity = updateComputersRamById(id, computerComponent.getRamId());
+        if (!responseEntity.equals(new ResponseEntity<>(HttpStatus.OK)))
+            return responseEntity;
+        responseEntity = updateComputersRomById(id, computerComponent.getRomId());
+        if (!responseEntity.equals(new ResponseEntity<>(HttpStatus.OK)))
+            return responseEntity;
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -130,6 +140,7 @@ public class ComputerController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> deleteComputer(@PathVariable ObjectId id) {
+        Computer computer1 = computerService.getComputerById(id);
         if (!computerService.getAllComputer().contains(computerService.getComputerById(id)))
             return new ResponseEntity<>("This Computer is not found", HttpStatus.BAD_REQUEST);
         Computer computer = computerService.getComputerById(id);

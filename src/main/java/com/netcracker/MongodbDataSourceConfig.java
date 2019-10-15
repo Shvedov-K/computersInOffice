@@ -27,7 +27,6 @@ public class MongodbDataSourceConfig extends AbstractMongoConfiguration {
 
     @Override
     @Bean
-    @Deprecated
     public MongoClient mongoClient() {
 
         ServerAddress serverAddress = new ServerAddress(env.getRequiredProperty("mongo.host"));

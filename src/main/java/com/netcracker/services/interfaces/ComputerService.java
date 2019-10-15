@@ -27,4 +27,7 @@ public interface ComputerService {
 
     void deleteComputerById(ObjectId id);
 
+    void stateChange(ObjectId id);
+
+    boolean usesCheck(ObjectId id);
 }

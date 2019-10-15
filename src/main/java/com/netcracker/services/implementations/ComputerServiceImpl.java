@@ -45,7 +45,6 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     public Computer addComputer(Computer newComputer) {
-        //newComputer.setId(ObjectId.get());
         computerRepository.save(newComputer);
         return newComputer;
     }
@@ -86,4 +85,16 @@ public class ComputerServiceImpl implements ComputerService {
         computerRepository.delete(computerRepository.findById(id));
     }
 
+    @Override
+    public void stateChange(ObjectId id) {
+        Computer computer = computerRepository.findById(id);
+        if (computer.getIsUsed()) computer.setIsUsed(false);
+        else computer.setIsUsed(true);
+        computerRepository.save(computer);
+    }
+
+    @Override
+    public boolean usesCheck(ObjectId id) {
+        return computerRepository.findById(id).getIsUsed();
+    }
 }

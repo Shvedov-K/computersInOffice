@@ -71,10 +71,13 @@ public class OfficeController {
         Computer newComputer = computerService.getComputerById(new ObjectId(newComputerId));
         if (newComputer == null) return new ResponseEntity<>("This computer is not found", HttpStatus.BAD_REQUEST);
         Office office = officeService.getOfficeById(id);
+        computerService.stateChange(new ObjectId(newComputerId));
+        newComputer = computerService.getComputerById(new ObjectId(newComputerId));
         officeService.addComputer(office, newComputer);
         computerService.deleteComputerById(new ObjectId(newComputerId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @RequestMapping(value = "/{id}/removeComputerFromOfficeById", method = RequestMethod.PUT)
     @ResponseBody
@@ -83,6 +86,7 @@ public class OfficeController {
             return new ResponseEntity<>("This computer is not found", HttpStatus.BAD_REQUEST);
         Computer computer = officeService.deleteComputer(officeService.getOfficeById(id), computerId);
         computerService.addOldComputer(computer);
+        computerService.stateChange(new ObjectId(computerId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -95,6 +99,10 @@ public class OfficeController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> deleteOffice(@PathVariable ObjectId id) {
+        List<String> computerList = officeService.getComputersIdList(id);
+        for (String computer : computerList) {
+            removeComputerFromOfficeById(id, computer);
+        }
         officeService.deleteOfficeById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
