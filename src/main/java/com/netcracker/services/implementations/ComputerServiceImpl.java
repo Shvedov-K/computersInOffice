@@ -34,6 +34,15 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     @Override
+    public Computer getComputerByIdOfAll(ObjectId id) {
+        List<Computer> computerList = getAllComputer();
+        for (Computer computer : computerList) {
+            if (new ObjectId(computer.getId()).equals(id)) return computer;
+        }
+        return null;
+    }
+
+    @Override
     public List<Computer> getAllComputer() {
         List<Office> officeList = officeRepository.findAll();
         List<Computer> computerList = computerRepository.findAll();

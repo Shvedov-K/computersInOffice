@@ -11,6 +11,8 @@ import java.util.List;
 public interface ComputerService {
     Computer getComputerById(ObjectId id);
 
+    Computer getComputerByIdOfAll(ObjectId id);
+
     List<Computer> getAllComputer();
 
     Computer addComputer(Computer newComputer);

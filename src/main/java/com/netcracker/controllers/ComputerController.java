@@ -46,6 +46,15 @@ public class ComputerController {
         return computerService.getComputerById(id);
     }
 
+    @RequestMapping(value = "/{id}/getComputerByIdOfAll", method = RequestMethod.GET)
+    @ResponseBody
+    public Computer getComputerByIdOfAll(@PathVariable("id") ObjectId id) {
+
+        return computerService.getComputerByIdOfAll(id);
+    }
+
+
+
     @RequestMapping(value = "/{id}/updateComputerById", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<?> updateComputerById(@PathVariable("id") ObjectId id, @Valid @RequestBody ComputerComponent computerComponent) {
